@@ -23,48 +23,28 @@ describe.each`
     appRef = app.get(AppService);
   });
 
-  describe("Object Data", () => {
-    it("Should be able to store Object", async () => {
-      await appRef.setData(TEST_DATA_KEY, TEST_OBJECT_DATA);
-      const data = await appRef.getData(TEST_DATA_KEY);
-      expect(data.data).toEqual(TEST_OBJECT_DATA);
+  describe("storage", () => {
+    it("should set and get data", async () => {
+      await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
+      expect(await appRef.storage.getItem(TEST_DATA_KEY)).toBe(
+        TEST_STRING_DATA
+      );
+
+      await appRef.storage.setItem(TEST_DATA_KEY, TEST_OBJECT_DATA);
+      expect(await appRef.storage.getItem(TEST_DATA_KEY)).toEqual(
+        TEST_OBJECT_DATA
+      );
     });
 
-    it("Should be able to delete Object", async () => {
-      await appRef.setData(TEST_DATA_KEY, TEST_OBJECT_DATA);
-      await appRef.deleteData(TEST_DATA_KEY);
-      const data = await appRef.getData(TEST_DATA_KEY);
-      expect(data.data).toBeNull();
-    });
-  });
-
-  describe("String Data", () => {
-    it("Should be able to store String", async () => {
-      await appRef.setData(TEST_DATA_KEY, TEST_STRING_DATA);
-      const data = await appRef.getData(TEST_DATA_KEY);
-      expect(data.data).toEqual(TEST_STRING_DATA);
+    it("should get all keys", async () => {
+      await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
+      expect(await appRef.storage.keys()).toMatchObject([TEST_DATA_KEY]);
     });
 
-    it("Should be able to delete String", async () => {
-      await appRef.setData(TEST_DATA_KEY, TEST_STRING_DATA);
-      await appRef.deleteData(TEST_DATA_KEY);
-      const data = await appRef.getData(TEST_DATA_KEY);
-      expect(data.data).toBeNull();
-    });
-  });
-
-  describe("Array Data", () => {
-    it("Should be able to store Array", async () => {
-      await appRef.setData(TEST_DATA_KEY, [TEST_OBJECT_DATA]);
-      const data = await appRef.getData(TEST_DATA_KEY);
-      expect(data.data).toEqual([TEST_OBJECT_DATA]);
-    });
-
-    it("Should be able to delete Array", async () => {
-      await appRef.setData(TEST_DATA_KEY, [TEST_OBJECT_DATA]);
-      await appRef.deleteData(TEST_DATA_KEY);
-      const data = await appRef.getData(TEST_DATA_KEY);
-      expect(data.data).toBeNull();
+    it("should delete data", async () => {
+      await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
+      await appRef.storage.removeItem(TEST_DATA_KEY);
+      expect(await appRef.storage.getItem(TEST_DATA_KEY)).toBeNull();
     });
   });
 

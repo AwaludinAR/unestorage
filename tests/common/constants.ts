@@ -1,3 +1,4 @@
+export const TEST_BASE_KEY = "./.temp";
 export const TEST_DATA_KEY = "testkey";
 
 export const TEST_OBJECT_DATA = {
