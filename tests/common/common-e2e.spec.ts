@@ -23,29 +23,25 @@ describe.each`
     appRef = app.get(AppService);
   });
 
-  describe("storage", () => {
-    it("should set and get data", async () => {
-      await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
-      expect(await appRef.storage.getItem(TEST_DATA_KEY)).toBe(
-        TEST_STRING_DATA
-      );
+  it("should set and get data", async () => {
+    await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
+    expect(await appRef.storage.getItem(TEST_DATA_KEY)).toBe(TEST_STRING_DATA);
 
-      await appRef.storage.setItem(TEST_DATA_KEY, TEST_OBJECT_DATA);
-      expect(await appRef.storage.getItem(TEST_DATA_KEY)).toEqual(
-        TEST_OBJECT_DATA
-      );
-    });
+    await appRef.storage.setItem(TEST_DATA_KEY, TEST_OBJECT_DATA);
+    expect(await appRef.storage.getItem(TEST_DATA_KEY)).toEqual(
+      TEST_OBJECT_DATA
+    );
+  });
 
-    it("should get all keys", async () => {
-      await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
-      expect(await appRef.storage.keys()).toMatchObject([TEST_DATA_KEY]);
-    });
+  it("should get all keys", async () => {
+    await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
+    expect(await appRef.storage.keys()).toMatchObject([TEST_DATA_KEY]);
+  });
 
-    it("should delete data", async () => {
-      await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
-      await appRef.storage.removeItem(TEST_DATA_KEY);
-      expect(await appRef.storage.getItem(TEST_DATA_KEY)).toBeNull();
-    });
+  it("should delete data", async () => {
+    await appRef.storage.setItem(TEST_DATA_KEY, TEST_STRING_DATA);
+    await appRef.storage.removeItem(TEST_DATA_KEY);
+    expect(await appRef.storage.getItem(TEST_DATA_KEY)).toBeNull();
   });
 
   afterAll(async () => {
