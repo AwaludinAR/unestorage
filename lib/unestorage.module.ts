@@ -1,5 +1,10 @@
 import { DynamicModule, Module } from "@nestjs/common";
-import { NamespaceDefinition, UnestorageModuleOptions } from "./interfaces";
+import {
+  AsyncNamespaceFactory,
+  NamespaceDefinition,
+  UnestorageModuleAsyncOptions,
+  UnestorageModuleOptions,
+} from "./interfaces";
 import { UnestorageCoreModule } from "./unestorage-core.module";
 import { createUnestorageProviders } from "./unestorage.providers";
 
@@ -9,6 +14,15 @@ export class UnestorageModule {
     return {
       module: UnestorageModule,
       imports: [UnestorageCoreModule.forRoot(opts)],
+    };
+  }
+
+  public static forRootAsync(
+    opts: UnestorageModuleAsyncOptions
+  ): DynamicModule {
+    return {
+      module: UnestorageModule,
+      imports: [UnestorageCoreModule.forRootAsync(opts)],
     };
   }
 
@@ -23,4 +37,10 @@ export class UnestorageModule {
       exports: providers,
     };
   }
+
+  // TODO: add forFeatureAsync
+  public static forRootFeature(
+    namespaces: AsyncNamespaceFactory[] = [],
+    storageName?: string
+  ) {}
 }
