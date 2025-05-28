@@ -31,7 +31,7 @@
     "ts-jest": "^29.3.4",
     "tsx": "^4.19.4",
     "typescript-eslint": "^8.33.0",
-    "unstorage": "^1.13.1"
+    "unstorage": "^1.16.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^10.0.0 || ^11.0.0",
