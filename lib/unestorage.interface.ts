@@ -1,13 +1,16 @@
-import { ModuleMetadata, Type } from "@nestjs/common";
-import { CreateStorageOptions } from "unstorage";
+import { ModuleMetadata, Type } from '@nestjs/common';
+import { CreateStorageOptions } from 'unstorage';
+
+export interface NamespaceDefinition {
+  name: string;
+  base: string;
+}
 
 export interface UnestorageModuleOptions extends CreateStorageOptions {
   storageName?: string;
-  storageFactory?: (storage: any, name: string) => any;
+  namespaces?: NamespaceDefinition[];
+  global?: boolean;
 }
-
-export interface UnestorageModuleFactoryOptions
-  extends Omit<UnestorageModuleOptions, "storageName"> {}
 
 export interface UnestorageOptionsFactory {
   createUnestorageOptions():
@@ -15,9 +18,16 @@ export interface UnestorageOptionsFactory {
     | UnestorageModuleOptions;
 }
 
+export type UnestorageModuleFactoryOptions = Omit<
+  UnestorageModuleOptions,
+  'storageName' | 'namespaces'
+>;
+
 export interface UnestorageModuleAsyncOptions
-  extends Pick<ModuleMetadata, "imports"> {
+  extends Pick<ModuleMetadata, 'imports'> {
   storageName?: string;
+  namespaces?: NamespaceDefinition[];
+  global?: boolean;
   useExisting?: Type<UnestorageOptionsFactory>;
   useClass?: Type<UnestorageOptionsFactory>;
   useFactory?: (

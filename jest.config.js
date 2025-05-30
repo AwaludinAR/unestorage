@@ -1,11 +1,13 @@
+'use strict';
+
 module.exports = {
-  moduleFileExtensions: ["js", "json", "ts"],
-  rootDir: ".",
-  testMatch: ["<rootDir>/tests/**/*.spec.ts"],
+  moduleFileExtensions: ['js', 'json', 'ts'],
+  rootDir: '.',
   transform: {
-    "^.+\\.ts$": "ts-jest",
+    '^.+\\.ts$': 'ts-jest',
   },
-  testEnvironment: "node",
+  testEnvironment: 'node',
+  testMatch: ['<rootDir>/tests/**/*.spec.ts'],
   collectCoverage: true,
-  collectCoverageFrom: ["lib/**/*.ts"],
+  collectCoverageFrom: ['lib/**/*.ts'],
 };

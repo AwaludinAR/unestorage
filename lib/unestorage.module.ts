@@ -1,46 +1,54 @@
-import { DynamicModule, Module } from "@nestjs/common";
+import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { createStorage } from 'unstorage';
 import {
-  AsyncNamespaceFactory,
-  NamespaceDefinition,
   UnestorageModuleAsyncOptions,
+  UnestorageModuleFactoryOptions,
   UnestorageModuleOptions,
-} from "./interfaces";
-import { UnestorageCoreModule } from "./unestorage-core.module";
-import { createUnestorageProviders } from "./unestorage.providers";
+} from './unestorage.interface';
+import {
+  createAsyncProviders,
+  createNamespaceProvider,
+  getStorageToken,
+} from './utils';
 
 @Module({})
 export class UnestorageModule {
-  public static forRoot(opts: UnestorageModuleOptions): DynamicModule {
+  static register(options?: UnestorageModuleOptions): DynamicModule {
+    const { storageName, namespaces, global, ...opts } = options || {};
+    const storageToken = getStorageToken(storageName);
+    const storageProvider: Provider = {
+      provide: storageToken,
+      useValue: createStorage(opts),
+    };
+    const namespaceProviders =
+      options?.namespaces?.map((namespace) =>
+        createNamespaceProvider(namespace, options.storageName),
+      ) || [];
     return {
+      global,
       module: UnestorageModule,
-      imports: [UnestorageCoreModule.forRoot(opts)],
+      providers: [storageProvider, ...namespaceProviders],
+      exports: [storageProvider, ...namespaceProviders],
     };
   }
 
-  public static forRootAsync(
-    opts: UnestorageModuleAsyncOptions
-  ): DynamicModule {
+  static registerAsync(options: UnestorageModuleAsyncOptions): DynamicModule {
+    const storageToken = getStorageToken(options.storageName);
+    const storageProvider: Provider = {
+      provide: storageToken,
+      useFactory: (opts: UnestorageModuleFactoryOptions) => createStorage(opts),
+    };
+    const namespaceProviders =
+      options.namespaces?.map((namespace) =>
+        createNamespaceProvider(namespace, options.storageName),
+      ) || [];
+    const asyncProviders = createAsyncProviders(options);
     return {
+      global: options.global,
       module: UnestorageModule,
-      imports: [UnestorageCoreModule.forRootAsync(opts)],
+      imports: options.imports,
+      providers: [...asyncProviders, storageProvider, ...namespaceProviders],
+      exports: [storageProvider, ...namespaceProviders],
     };
   }
-
-  public static forFeature(
-    namespaces: NamespaceDefinition[],
-    storageName?: string
-  ): DynamicModule {
-    const providers = createUnestorageProviders(storageName, namespaces);
-    return {
-      module: UnestorageModule,
-      providers: providers,
-      exports: providers,
-    };
-  }
-
-  // TODO: add forFeatureAsync
-  public static forRootFeature(
-    namespaces: AsyncNamespaceFactory[] = [],
-    storageName?: string
-  ) {}
 }
