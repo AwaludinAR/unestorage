@@ -1,7 +1,7 @@
 /**
  * @type {import('semantic-release').GlobalConfig}
  */
-module.exports = {
+export default {
   repositoryUrl: 'https://github.com/AwaludinAR/unestorage.git',
   branches: ['main', 'next'],
   plugins: [
