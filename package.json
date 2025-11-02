@@ -1,6 +1,5 @@
 {
   "name": "unestorage",
-  "version": "1.0.0",
   "description": "Nestjs module for unstorage",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
