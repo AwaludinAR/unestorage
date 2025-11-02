@@ -14,7 +14,7 @@ import {
 @Module({})
 export class UnestorageModule {
   static register(options?: UnestorageModuleOptions): DynamicModule {
-    const { storageName, namespaces, global, ...opts } = options || {};
+    const { storageName, global, ...opts } = options || {};
     const storageToken = getStorageToken(storageName);
     const storageProvider: Provider = {
       provide: storageToken,
